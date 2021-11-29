@@ -51,3 +51,15 @@ dependencies {
         implementation "com.facebook.react:react-native:${safeExtGet('reactnativeVersion', '+')}"
     }
 }
+
+afterEvaluate {
+    publishing {
+        publications {
+            release(MavenPublication) {
+                from components.release
+                groupId = 'com.github.wordpress-mobile'
+                artifactId = 'react-native-clipboard'
+            }
+        }
+    }
+}
