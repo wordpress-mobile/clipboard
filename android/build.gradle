@@ -1,11 +1,6 @@
 buildscript {
-    repositories {
-        google()
-        jcenter()
-    }
-
-    dependencies {
-        classpath 'com.android.tools.build:gradle:3.2.1'
+    ext.safeExtGet = {prop, fallback ->
+        rootProject.ext.has(prop) ? rootProject.ext.get(prop) : fallback
     }
 }
 
@@ -17,7 +12,10 @@ def getExtOrIntegerDefault(name) {
     return rootProject.ext.has(name) ? rootProject.ext.get(name) : (project.properties['ReactNativeClipBoard_' + name]).toInteger()
 }
 
-apply plugin: 'com.android.library'
+plugins {
+    id "maven-publish"
+    id "com.android.library"
+}
 
 android {
     compileSdkVersion getExtOrIntegerDefault('compileSdkVersion')
@@ -29,12 +27,27 @@ android {
 }
 
 repositories {
+    if (project == rootProject) {
+        maven {
+            url "https://a8c-libs.s3.amazonaws.com/android/react-native-mirror"
+        }
+    } else {
+        // When building as a dep, the RN's maven repo is locally in the node_modules folder
+        def nodeModulesPath = "${project.buildDir}/../../node_modules/"
+        maven { url "${nodeModulesPath}/react-native/android" }
+    }
+
     google()
-    jcenter()
+    jcenter() // JCenter in read-only mode but need it for RN0.64 stuff.
     mavenCentral()
 }
 
 dependencies {
-    //noinspection GradleDynamicVersion
-    implementation 'com.facebook.react:react-native:+'
+    if (project == rootProject) {
+        // If this is the root project (e.g. Jitpack), specify a version
+        implementation 'com.facebook.react:react-native:0.64.0'
+    } else {
+        //noinspection GradleDynamicVersion
+        implementation "com.facebook.react:react-native:${safeExtGet('reactnativeVersion', '+')}"
+    }
 }
