@@ -1,3 +1,5 @@
+## [DEPRECATED] _This repository is no longer used, as in Gutenberg we now use the original version of this package, plus fetching [a prebuilt Android artifact from a maven repo on S3](https://github.com/wordpress-mobile/react-native-libraries-publisher/blob/trunk/README.md)._
+
 # @react-native-clipboard/clipboard
 
 [![Build Status][build-badge]][build]
