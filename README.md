@@ -1,3 +1,5 @@
+**[DEPRECATED]** _This repository is no longer used, as in Gutenberg we now use the original version of this package._
+
 # @react-native-clipboard/clipboard
 
 [![Build Status][build-badge]][build]
